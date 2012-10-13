@@ -1,4 +1,6 @@
 package CPI::Gateway::PayPal;
+# ABSTRACT: CPI's PayPal driver
+
 use Moose;
 use DateTime;
 use DateTime::Format::Strptime;
@@ -197,4 +199,38 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
-# TODO: POD!
+__END__
+
+=pod
+
+=attr api_username
+
+=attr api_password
+
+=attr signature
+
+=attr nvp
+
+Business::PayPal::NVP object, built using the api_username, api_password and
+signature attributes.
+
+=attr date_format
+
+DateTime::Format::Strptime object, to format dates in a way PayPal understands.
+
+=method notify
+
+Translate IPN information from PayPal to a standard hash, the same way other
+CPI gateways do.
+
+=method query_transactions
+
+Searches transactions made by this account.
+
+=method get_transaction_details
+
+Get more data about a given transaction.
+
+=method get_hidden_inputs
+
+Get all the inputs to make a checkout form.
