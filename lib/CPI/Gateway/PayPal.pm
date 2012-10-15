@@ -1,47 +1,42 @@
 package CPI::Gateway::PayPal;
 # ABSTRACT: CPI's PayPal driver
 
-use Moose;
+use Moo;
 use DateTime;
 use DateTime::Format::Strptime;
 use Business::PayPal::IPN;
 use Business::PayPal::NVP;
 use Carp 'croak';
-use namespace::autoclean;
 
 extends 'CPI::Gateway::Base';
 
 has '+checkout_url' => (
-    default => 'https://www.paypal.com/cgi-bin/webscr'
+    default => sub { 'https://www.paypal.com/cgi-bin/webscr' },
 );
 
 has '+currency' => (
-    default => 'USD',
+    default => sub { 'USD' },
 );
 
 # TODO: make it lazy, and croak if needed
 has api_username => (
-    isa => 'Str',
     is => 'ro',
     required => 0,
 );
 
 has api_password => (
-    isa => 'Str',
     is => 'ro',
     required => 0,
 );
 
 has signature    => (
-    isa => 'Str',
     is => 'ro',
     required => 0,
 );
 
 has nvp => (
-    isa => 'Business::PayPal::NVP',
-    is => 'ro',
-    lazy => 1,
+    is      => 'ro',
+    lazy    => 1,
     default => sub {
         my $self = shift;
 
@@ -57,7 +52,6 @@ has nvp => (
 );
 
 has date_format => (
-    isa => 'DateTime::Format::Strptime',
     is => 'ro',
     lazy => 1,
     default => sub {
@@ -194,8 +188,6 @@ sub get_hidden_inputs {
 
     return @hidden_inputs;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 
