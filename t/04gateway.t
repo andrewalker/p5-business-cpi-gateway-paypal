@@ -4,18 +4,18 @@ use strict;
 use autodie;
 use Test::More;
 use FindBin '$Bin';
-use CPI::Gateway::PayPal;
+use Business::CPI::Gateway::PayPal;
 
 sub get_value_for {
     my ($form, $name) = @_;
     return $form->look_down(_tag => 'input', name => $name )->attr('value');
 }
 
-ok(my $cpi = CPI::Gateway::PayPal->new(
+ok(my $cpi = Business::CPI::Gateway::PayPal->new(
     receiver_email => 'andre@andrewalker.net',
 ), 'build $cpi');
 
-isa_ok($cpi, 'CPI::Gateway::PayPal');
+isa_ok($cpi, 'Business::CPI::Gateway::PayPal');
 
 ok(my $cart = $cpi->new_cart({
     buyer => {
@@ -24,7 +24,7 @@ ok(my $cart = $cpi->new_cart({
     }
 }), 'build $cart');
 
-isa_ok($cart, 'CPI::Cart');
+isa_ok($cart, 'Business::CPI::Cart');
 
 ok(my $item = $cart->add_item({
     id          => 1,

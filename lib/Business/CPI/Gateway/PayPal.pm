@@ -1,5 +1,5 @@
-package CPI::Gateway::PayPal;
-# ABSTRACT: CPI's PayPal driver
+package Business::CPI::Gateway::PayPal;
+# ABSTRACT: Business::CPI's PayPal driver
 
 use Moo;
 use DateTime;
@@ -8,7 +8,7 @@ use Business::PayPal::IPN;
 use Business::PayPal::NVP;
 use Carp 'croak';
 
-extends 'CPI::Gateway::Base';
+extends 'Business::CPI::Gateway::Base';
 
 has '+checkout_url' => (
     default => sub { 'https://www.paypal.com/cgi-bin/webscr' },
@@ -213,7 +213,7 @@ DateTime::Format::Strptime object, to format dates in a way PayPal understands.
 =method notify
 
 Translate IPN information from PayPal to a standard hash, the same way other
-CPI gateways do.
+Business::CPI gateways do.
 
 =method query_transactions
 
