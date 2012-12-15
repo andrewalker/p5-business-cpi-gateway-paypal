@@ -71,7 +71,7 @@ sub notify {
     my %vars = $ipn->vars;
 
     my $result = {
-        payment_id => int($vars{invoice}),
+        payment_id => $vars{invoice},
         status     => undef,
         amount     => $vars{mc_gross},
         date       => $vars{payment_date},
