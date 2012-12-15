@@ -8,6 +8,8 @@ use Business::PayPal::IPN;
 use Business::PayPal::NVP;
 use Carp 'croak';
 
+# VERSION
+
 extends 'Business::CPI::Gateway::Base';
 
 has '+checkout_url' => (
