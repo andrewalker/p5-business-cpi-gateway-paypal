@@ -73,10 +73,14 @@ sub notify {
     my %vars = $ipn->vars;
 
     my $result = {
-        payment_id => $vars{invoice},
-        status     => undef,
-        amount     => $vars{mc_gross},
-        date       => $vars{payment_date},
+        payment_id             => $vars{invoice},
+        gateway_transaction_id => $vars{txn_id},
+        exchange_rate          => $vars{exchange_rate},
+        status                 => undef,
+        settle_amount          => $vars{settle_amount},
+        amount                 => $vars{mc_gross},
+        fee                    => $vars{mc_fee},
+        date                   => $vars{payment_date},
     };
 
     if ($ipn->completed) {
