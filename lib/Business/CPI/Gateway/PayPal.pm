@@ -231,3 +231,7 @@ Get more data about a given transaction.
 =method get_hidden_inputs
 
 Get all the inputs to make a checkout form.
+
+=head1 SPONSORED BY
+
+Aware - L< http://www.aware.com.br >
