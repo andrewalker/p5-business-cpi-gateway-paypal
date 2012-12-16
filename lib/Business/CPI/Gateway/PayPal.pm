@@ -86,7 +86,7 @@ sub notify {
         gateway_transaction_id => $vars{txn_id},
         exchange_rate          => $vars{exchange_rate},
         status                 => undef,
-        net_amount             => $vars{settle_amount} - $vars{mc_fee},
+        net_amount             => ($vars{settle_amount} || $vars{mc_gross}) - ($vars{mc_fee} || 0),
         amount                 => $vars{mc_gross},
         fee                    => $vars{mc_fee},
         date                   => $vars{payment_date},
