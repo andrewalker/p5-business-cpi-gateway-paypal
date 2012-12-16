@@ -12,8 +12,17 @@ use Carp 'croak';
 
 extends 'Business::CPI::Gateway::Base';
 
+has sandbox => (
+    is => 'rw',
+    default => sub { 0 },
+);
+
 has '+checkout_url' => (
-    default => sub { 'https://www.paypal.com/cgi-bin/webscr' },
+    default => sub {
+        my $sandbox = shift->sandbox ? 'sandbox.' : '';
+        return "https://www.${sandbox}paypal.com/cgi-bin/webscr";
+    },
+    lazy => 1,
 );
 
 has '+currency' => (
