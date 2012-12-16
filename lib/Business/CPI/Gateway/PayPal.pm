@@ -216,6 +216,11 @@ __END__
 
 =pod
 
+=attr sandbox
+
+Boolean attribute to set whether it's running on sandbox or not. If it is, it
+will post the form to the sandbox url in PayPal.
+
 =attr api_username
 
 =attr api_password
