@@ -77,10 +77,13 @@ sub notify {
         gateway_transaction_id => $vars{txn_id},
         exchange_rate          => $vars{exchange_rate},
         status                 => undef,
-        settle_amount          => $vars{settle_amount},
+        net_amount             => $vars{settle_amount} - $vars{mc_fee},
         amount                 => $vars{mc_gross},
         fee                    => $vars{mc_fee},
         date                   => $vars{payment_date},
+        payer => {
+            name => $vars{first_name} . ' ' . $vars{last_name},
+        }
     };
 
     if ($ipn->completed) {
