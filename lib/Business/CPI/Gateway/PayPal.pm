@@ -189,6 +189,9 @@ sub get_transaction_details {
 sub get_hidden_inputs {
     my ($self, $info) = @_;
 
+    my $buyer = $info->{buyer};
+    my $cart  = $info->{cart};
+
     my @hidden_inputs = (
         # -- make paypal accept multiple items (cart)
         cmd           => '_ext-enter',
@@ -200,11 +203,37 @@ sub get_hidden_inputs {
         currency_code => $self->currency,
         charset       => $self->form_encoding,
         invoice       => $info->{payment_id},
-        email         => $info->{buyer}->email,
+        email         => $buyer->email,
 
-        # TODO: shipping / handling
         no_shipping   => 1,
     );
+
+    my %buyer_extra = (
+        address_line1    => 'address1',
+        address_line2    => 'address2',
+        address_city     => 'city',
+        address_state    => 'state',
+        address_country  => 'country',
+        address_zip_code => 'zip',
+    );
+
+    for (keys %buyer_extra) {
+        if (my $value = $buyer->$_) {
+            push @hidden_inputs, ( $buyer_extra{$_} => $value );
+        }
+    }
+
+    my %cart_extra = (
+        discount => 'discount_amount_cart',
+        handling => 'handling_cart',
+        tax      => 'tax_cart',
+    );
+
+    for (keys %cart_extra) {
+        if (my $value = $cart->$_) {
+            push @hidden_inputs, ( $cart_extra{$_} => $value );
+        }
+    }
 
     my $i = 1;
 
