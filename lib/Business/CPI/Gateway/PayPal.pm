@@ -205,7 +205,7 @@ sub get_hidden_inputs {
         invoice       => $info->{payment_id},
         email         => $buyer->email,
 
-        no_shipping   => 1,
+        no_shipping   => $buyer->address_line1 ? 0 : 1,
     );
 
     my %buyer_extra = (
@@ -219,6 +219,10 @@ sub get_hidden_inputs {
 
     for (keys %buyer_extra) {
         if (my $value = $buyer->$_) {
+            # XXX: find a way to remove this check
+            if ($_ eq 'country') {
+                $value = uc $value;
+            }
             push @hidden_inputs, ( $buyer_extra{$_} => $value );
         }
     }
