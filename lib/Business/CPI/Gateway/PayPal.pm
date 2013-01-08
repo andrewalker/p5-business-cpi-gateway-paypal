@@ -318,4 +318,4 @@ Get all the inputs to make a checkout form.
 
 =head1 SPONSORED BY
 
-Aware - L< http://www.aware.com.br >
+L<< Aware | http://www.aware.com.br >>
