@@ -104,26 +104,27 @@ sub notify {
             email => $vars{payer_email},
         }
     };
-
-    return $result;
 }
 
 sub _interpret_status {
     my ($self, $status) = @_;
 
     for ($status) {
-        /^Completed$/ && return 'completed';
-        /^Processed$/ && return 'completed';
-        /^Denied$/    && return 'failed';
-        /^Expired$/   && return 'failed';
-        /^Failed$/    && return 'failed';
-        /^Voided$/    && return 'refunded';
-        /^Refunded$/  && return 'refunded';
-        /^Reversed$/  && return 'refunded';
-        /^Pending$/   && return 'processing';
+        /^Completed$/ ||
+        /^Processed$/ and return 'completed';
+
+        /^Denied$/    ||
+        /^Expired$/   ||
+        /^Failed$/    and return 'failed';
+
+        /^Voided$/    ||
+        /^Refunded$/  ||
+        /^Reversed$/  and return 'refunded';
+
+        /^Pending$/   and return 'processing';
     }
 
-    return 'Unknown status'
+    return 'unknown';
 }
 
 sub query_transactions {
