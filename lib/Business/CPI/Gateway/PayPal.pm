@@ -6,6 +6,7 @@ use DateTime;
 use DateTime::Format::Strptime;
 use Business::CPI::Gateway::PayPal::IPN;
 use Business::PayPal::NVP;
+use Data::Dumper;
 use Carp 'croak';
 
 # VERSION
@@ -90,7 +91,9 @@ sub notify {
 
     my %vars = %{ $ipn->vars };
 
-    return {
+    $self->log->info("Received notification $vars{ipn_track_id} for transaction $vars{txn_id}.");
+
+    my $r = {
         payment_id             => $vars{invoice},
         status                 => $self->_interpret_status($vars{payment_status}),
         gateway_transaction_id => $vars{txn_id},
@@ -104,6 +107,13 @@ sub notify {
             email => $vars{payer_email},
         }
     };
+
+    if ($self->log->is_debug) {
+        $self->log->debug("The notification data is:\n" . Dumper($r));
+        $self->log->debug("The request data is:\n" . Dumper($req));
+    }
+
+    return $r;
 }
 
 sub _interpret_status {
