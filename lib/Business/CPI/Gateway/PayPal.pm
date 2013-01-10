@@ -150,8 +150,7 @@ sub query_transactions {
     );
 
     if ($search{ACK} ne 'Success') {
-        require Data::Dumper;
-        croak "Error in the query: " . Data::Dumper::Dumper(\%search);
+        croak "Error in the query: " . Dumper(\%search);
     }
 
     while (my ($k, $v) = each %search) {
@@ -184,8 +183,7 @@ sub get_transaction_details {
     );
 
     if ($details{ACK} ne 'Success') {
-        require Data::Dumper;
-        croak "Error in the details fetching: " . Data::Dumper::Dumper(\%details);
+        croak "Error in the details fetching: " . Dumper(\%details);
     }
 
     return {
