@@ -4,7 +4,7 @@ package Business::CPI::Gateway::PayPal;
 use Moo;
 use DateTime;
 use DateTime::Format::Strptime;
-use Business::PayPal::IPN;
+use Business::CPI::Gateway::PayPal::IPN;
 use Business::PayPal::NVP;
 use Carp 'croak';
 
@@ -81,46 +81,49 @@ has date_format => (
 sub notify {
     my ( $self, $req ) = @_;
 
-    if ($self->sandbox) {
-        $Business::PayPal::IPN::GTW = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-    }
-    else {
-        $Business::PayPal::IPN::GTW = 'https://www.paypal.com/cgi-bin/webscr';
-    }
+    my $ipn = Business::CPI::Gateway::PayPal::IPN->new(
+        query       => $req,
+        gateway_url => $self->checkout_url,
+    );
 
-    my $ipn = Business::PayPal::IPN->new( query => $req )
-        or die Business::PayPal::IPN->error;
+    croak 'Invalid IPN request' unless $ipn->is_valid;
 
-    my %vars = $ipn->vars;
+    my %vars = %{ $ipn->vars };
 
-    my $result = {
+    return {
         payment_id             => $vars{invoice},
+        status                 => $self->_interpret_status($vars{payment_status}),
         gateway_transaction_id => $vars{txn_id},
         exchange_rate          => $vars{exchange_rate},
-        status                 => undef,
         net_amount             => ($vars{settle_amount} || $vars{mc_gross}) - ($vars{mc_fee} || 0),
         amount                 => $vars{mc_gross},
         fee                    => $vars{mc_fee},
         date                   => $vars{payment_date},
         payer => {
-            name => $vars{first_name} . ' ' . $vars{last_name},
+            name  => $vars{first_name} . ' ' . $vars{last_name},
+            email => $vars{payer_email},
         }
     };
 
-    if ($ipn->completed) {
-        $result->{status} = 'completed';
-    }
-    elsif (my $reason = $ipn->pending) {
-        $result->{status} = 'processing';
-    }
-    elsif ($ipn->failed || $ipn->denied) {
-        $result->{status} = 'failed';
-    }
-    else {
-        return {}; # unknown status
+    return $result;
+}
+
+sub _interpret_status {
+    my ($self, $status) = @_;
+
+    for ($status) {
+        /^Completed$/ && return 'completed';
+        /^Processed$/ && return 'completed';
+        /^Denied$/    && return 'failed';
+        /^Expired$/   && return 'failed';
+        /^Failed$/    && return 'failed';
+        /^Voided$/    && return 'refunded';
+        /^Refunded$/  && return 'refunded';
+        /^Reversed$/  && return 'refunded';
+        /^Pending$/   && return 'processing';
     }
 
-    return $result;
+    return 'Unknown status'
 }
 
 sub query_transactions {
