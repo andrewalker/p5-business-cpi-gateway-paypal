@@ -23,13 +23,7 @@ has vars => (
     is      => 'lazy',
     default => sub {
         my $self = shift;
-
-        my $query = $self->query;
-        my %vars;
-
-        map { $vars{$_} = $query->param($_) } $query->param;
-
-        return \%vars;
+        return { map { $_ => $self->query->param($_) } $self->query->param };
     },
 );
 
