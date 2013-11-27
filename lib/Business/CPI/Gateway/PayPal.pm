@@ -12,6 +12,7 @@ use Carp 'croak';
 # VERSION
 
 extends 'Business::CPI::Gateway::Base';
+with 'Business::CPI::Role::Gateway::FormCheckout';
 
 has sandbox => (
     is => 'rw',

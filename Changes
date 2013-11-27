@@ -1,6 +1,7 @@
 Revision history for Business::CPI's driver for PayPal.
 
 {{$NEXT}}
+    - Fix incompatibilities with lastest version of Business::CPI
 
 0.902 2013-01-30T22:07:35Z
     - Add Changes file
