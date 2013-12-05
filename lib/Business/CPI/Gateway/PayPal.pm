@@ -201,9 +201,9 @@ sub get_transaction_details {
 
 sub _checkout_form_main_map {
     {
-        receiver_email => 'business',
-        currency       => 'currency_code',
-        form_encoding  => 'charset',
+        receiver_id   => 'business',
+        currency      => 'currency_code',
+        form_encoding => 'charset',
     }
 }
 
