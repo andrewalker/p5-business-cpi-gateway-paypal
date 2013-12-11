@@ -125,7 +125,7 @@ It has less than one third the size (counting blank lines, but not pod). It
 uses Moo, and has a much more readable code. It has real tests, and the small
 code makes it easier to find mistakes. I removed some methods like
 C<completed>, so now you have to check: $ipn->vars->{payment_status} eq
-'Completed'. There are many more possible payment status in PayPal than what
+'Completed'. There are many more possible payment statuses in PayPal than what
 the old module expected (it implemented version 1.5, while at the time of this
 writing, PayPal's IPN is in version 3.7; so a lot has changed). So I think
 those auxiliary methods like C<completed>, C<pending>, etc, are not too useful.
@@ -160,7 +160,7 @@ The name of the user agent to post to PayPal.
 =attr user_agent
 
 Defaults to a LWP::UserAgent object, but can be a custom object provided for
-testing purposes, or by the users preference. Could be L<Mojo::UserAgent>, for
+testing purposes, or by the user's preference. Could be L<Mojo::UserAgent>, for
 example.
 
 =attr response
