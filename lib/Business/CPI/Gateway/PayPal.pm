@@ -188,14 +188,15 @@ sub get_transaction_details {
     }
 
     return {
-        payment_id    => $details{INVNUM},
-        status        => lc $details{PAYMENTSTATUS},
-        amount        => $details{AMT},
-        net_amount    => $details{SETTLEAMT},
-        tax           => $details{TAXAMT},
-        exchange_rate => $details{EXCHANGERATE},
-        date          => $self->date_format->parse_datetime($details{ORDERTIME}),
-        buyer_email   => $details{EMAIL},
+        payment_id             => $details{INVNUM},
+        status                 => lc($details{PAYMENTSTATUS}),
+        amount                 => $details{AMT},
+        net_amount             => $details{SETTLEAMT},
+        tax                    => $details{TAXAMT},
+        exchange_rate          => $details{EXCHANGERATE},
+        date                   => $self->date_format->parse_datetime( $details{ORDERTIME} ),
+        buyer_email            => $details{EMAIL},
+        gateway_transaction_id => $id,
     };
 }
 
